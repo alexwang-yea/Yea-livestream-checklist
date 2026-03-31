@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YEA Livestream Checklist — Taiwan</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E8192C;
+    --red-dark: #b5101e;
+    --red-light: #ffeaec;
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e8e6e1;
+    --text: #1a1a1a;
+    --muted: #888680;
+    --green: #1a7a4a;
+    --green-bg: #eaf5ef;
+    --amber: #b06000;
+    --amber-bg: #fff4e0;
+    --purple: #4a3ab5;
+    --purple-bg: #eeedfe;
+    --teal: #0d6e55;
+    --teal-bg: #e1f5ee;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    background: var(--bg);
+  }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+  }
+
+  .login-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: var(--red);
+    border-radius: 12px;
+    margin-bottom: 1.25rem;
+  }
+
+  .login-logo span {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: -0.5px;
+  }
+
+  .login-card h1 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .login-card p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+
+  .login-card input[type="password"] {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-align: center;
+    outline: none;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.15s;
+  }
+
+  .login-card input[type="password"]:focus {
+    border-color: var(--red);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .login-btn:hover { background: var(--red-dark); }
+
+  .login-error {
+    font-size: 12px;
+    color: var(--red);
+    margin-top: 0.5rem;
+    min-height: 18px;
+  }
+
+  /* ── APP SCREEN ── */
+  #app-screen { display: none; }
+
+  .top-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .top-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: var(--red);
+    border-radius: 7px;
+    flex-shrink: 0;
+  }
+
+  .top-logo span {
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .top-title {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .top-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .top-reset {
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+
+  .top-reset:hover { border-color: var(--red); color: var(--red); }
+
+  .main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  /* summary strip */
+  .summary-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  /* sections */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sec-pill {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 10px;
+    border-radius: 99px;
+  }
+
+  .pill-manager { background: var(--purple-bg); color: var(--purple); }
+  .pill-affiliate { background: var(--teal-bg); color: var(--teal); }
+  .pill-yea { background: var(--red-light); color: var(--red-dark); }
+  .pill-warehouse { background: var(--amber-bg); color: var(--amber); }
+
+  .sec-name {
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+  }
+
+  .sec-count {
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-track {
+    height: 2px;
+    background: var(--border);
+  }
+
+  .progress-fill {
+    height: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .fill-manager { background: var(--purple); }
+  .fill-affiliate { background: var(--teal); }
+  .fill-yea { background: var(--red); }
+  .fill-warehouse { background: var(--amber); }
+
+  /* items */
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .item:last-child { border-bottom: none; }
+  .item:hover { background: #fafaf8; }
+  .item:active { background: #f3f2ef; }
+
+  .cb {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #d0cec8;
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .cb svg { display: none; }
+
+  .item.checked .cb {
+    border-color: transparent;
+  }
+
+  .item.checked.sec-manager .cb { background: var(--purple); }
+  .item.checked.sec-affiliate .cb { background: var(--teal); }
+  .item.checked.sec-yea .cb { background: var(--red); }
+  .item.checked.sec-warehouse .cb { background: var(--amber); }
+  .item.checked .cb svg { display: block; }
+
+  .item-text {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--text);
+    transition: color 0.15s;
+    flex: 1;
+  }
+
+  .item.checked .item-text {
+    color: #bbb;
+    text-decoration: line-through;
+  }
+
+  /* footer note */
+  .footer-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><span>YEA</span></div>
+    <h1>Team Checklist</h1>
+    <p>Taiwan Overseas Livestream Preparation</p>
+    <input type="password" id="pw-input" placeholder="Enter password" />
+    <button class="login-btn" onclick="tryLogin()">Enter</button>
+    <div class="login-error" id="login-error"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+  <div class="top-bar">
+    <div class="top-logo"><span>YEA</span></div>
+    <div class="top-title">Taiwan Livestream Prep</div>
+    <div class="top-sub" id="last-updated"></div>
+    <button class="top-reset" onclick="resetAll()">Reset</button>
+  </div>
+  <div class="main">
+    <div class="summary-strip" id="summary"></div>
+    <div id="sections"></div>
+    <div class="footer-note">Tap any item to mark as done &nbsp;·&nbsp; YEA Business</div>
+  </div>
+</div>
+
+<script>
+const PASSWORD = 'yea2025';
+
+const SECTIONS = [
+  {
+    id: 'manager', label: 'Manager', pill: 'pill-manager', fill: 'fill-manager',
+    items: [
+      'Taiwan Fest registration / confirmation',
+      'Category — shop whitelisting',
+      'Voucher support setup',
+    ]
+  },
+  {
+    id: 'affiliate', label: 'Affiliate', pill: 'pill-affiliate', fill: 'fill-affiliate',
+    items: [
+      'Confirm headcount (5 pax confirmed)',
+      'Arrange dinner in Taipei — 21 Jan',
+      'Arrange car pickup at 5.30pm — 21 Jan',
+      'Check livestream equipment & lighting',
+      'Brief affiliates on livestream plan & flow',
+    ]
+  },
+  {
+    id: 'yea', label: 'YEA', pill: 'pill-yea', fill: 'fill-yea',
+    items: [
+      'Logistics arrangement confirmed',
+      'Livestream sequence finalised',
+      'Full rundown prepared',
+      '货盘 (product tray) — stock locked',
+      'New shop opened for supplement',
+      'SFA submission completed',
+      'Margin recalculated (with voucher)',
+      'Ads budget confirmed',
+      'Welcome slide and bouquet',
+      'Hotel and flight arrangement',
+      'Restaurant arrangement',
+      'Minimize stock return — brief affiliate & live banner',
+      'WiFi VPN pretest',
+    ]
+  },
+  {
+    id: 'warehouse', label: 'Warehouse', pill: 'pill-warehouse', fill: 'fill-warehouse',
+    items: [
+      'Notify Kaimay',
+      'Prepare box',
+      'Forecast packaging time',
+    ]
+  }
+];
+
+const STORAGE_KEY = 'yea_livestream_checklist_v1';
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e) {}
+  const s = {};
+  SECTIONS.forEach(sec => { s[sec.id] = sec.items.map(() => false); });
+  return s;
+}
+
+let state = loadState();
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function tryLogin() {
+  const val = document.getElementById('pw-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+    renderApp();
+  } else {
+    document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') tryLogin();
+});
+
+function resetAll() {
+  if (!confirm('Reset all checkboxes?')) return;
+  SECTIONS.forEach(sec => { state[sec.id] = sec.items.map(() => false); });
+  saveState();
+  renderApp();
+}
+
+function checkSVG() {
+  return `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function renderApp() {
+  // last updated
+  const now = new Date();
+  document.getElementById('last-updated').textContent =
+    now.toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  // summary
+  let totalDone = 0, totalAll = 0;
+  SECTIONS.forEach(sec => {
+    const done = state[sec.id].filter(Boolean).length;
+    totalDone += done;
+    totalAll += sec.items.length;
+  });
+
+  const sumEl = document.getElementById('summary');
+  sumEl.innerHTML = `
+    <div class="stat"><div class="stat-num">${totalDone}/${totalAll}</div><div class="stat-label">Total</div></div>
+    ${SECTIONS.map(sec => {
+      const d = state[sec.id].filter(Boolean).length;
+      return `<div class="stat"><div class="stat-num">${d}/${sec.items.length}</div><div class="stat-label">${sec.label}</div></div>`;
+    }).join('')}
+  `;
+
+  // sections
+  const secEl = document.getElementById('sections');
+  secEl.innerHTML = '';
+
+  SECTIONS.forEach(sec => {
+    const done = state[sec.id].filter(Boolean).length;
+    const total = sec.items.length;
+    const pct = total ? Math.round(done / total * 100) : 0;
+
+    const div = document.createElement('div');
+    div.className = 'section';
+    div.innerHTML = `
+      <div class="sec-head">
+        <span class="sec-pill ${sec.pill}">${sec.label}</span>
+        <span class="sec-name">${sec.label} tasks</span>
+        <span class="sec-count">${done}/${total}</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill ${sec.fill}" style="width:${pct}%"></div></div>
+    `;
+
+    sec.items.forEach((text, idx) => {
+      const checked = state[sec.id][idx];
+      const row = document.createElement('div');
+      row.className = `item sec-${sec.id}${checked ? ' checked' : ''}`;
+      row.innerHTML = `<div class="cb">${checkSVG()}</div><span class="item-text">${text}</span>`;
+      row.addEventListener('click', () => {
+        state[sec.id][idx] = !state[sec.id][idx];
+        saveState();
+        renderApp();
+      });
+      div.appendChild(row);
+    });
+
+    secEl.appendChild(div);
+  });
+}
+</script>
+</body>
+</html>
