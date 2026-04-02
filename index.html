@@ -1,499 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>YEA Livestream Checklist — Taiwan</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>YEA Livestream Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --red:#E8192C;--red-dark:#b5101e;--red-light:#ffeaec;
+  --bg:#f7f6f3;--surface:#fff;--border:#e8e6e1;
+  --text:#1a1a1a;--muted:#8a8680;--muted2:#b8b5b0;
+  --purple:#4a3ab5;--purple-bg:#eeedfe;
+  --teal:#0d6e55;--teal-bg:#e1f5ee;
+  --amber:#b06000;--amber-bg:#fff4e0;
+  --blue:#1a5fa8;--blue-bg:#e8f0fb;
+  --green:#1a7a4a;--green-bg:#eaf5ef;
+  --radius:10px;--radius-lg:14px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 
-  :root {
-    --red: #E8192C;
-    --red-dark: #b5101e;
-    --red-light: #ffeaec;
-    --bg: #f7f6f3;
-    --surface: #ffffff;
-    --border: #e8e6e1;
-    --text: #1a1a1a;
-    --muted: #888680;
-    --green: #1a7a4a;
-    --green-bg: #eaf5ef;
-    --amber: #b06000;
-    --amber-bg: #fff4e0;
-    --purple: #4a3ab5;
-    --purple-bg: #eeedfe;
-    --teal: #0d6e55;
-    --teal-bg: #e1f5ee;
-  }
+/* LOADING */
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:200;flex-direction:column;gap:12px;}
+#loading.hidden{display:none;}
+.spinner{width:28px;height:28px;border:2.5px solid var(--border);border-top-color:var(--red);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+/* LOGIN */
+#login-screen{display:none;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem 2rem;width:100%;max-width:360px;text-align:center;}
+.login-logo{display:inline-flex;align-items:center;justify-content:center;width:50px;height:50px;background:var(--red);border-radius:11px;margin-bottom:1.25rem;}
+.login-logo span{font-size:17px;font-weight:600;color:#fff;}
+.login-card h1{font-size:17px;font-weight:600;margin-bottom:.25rem;}
+.login-card p{font-size:12px;color:var(--muted);margin-bottom:1.5rem;}
+.login-card input[type=password]{width:100%;padding:.65rem 1rem;border:1px solid var(--border);border-radius:8px;font-family:'DM Mono',monospace;font-size:15px;letter-spacing:2px;text-align:center;outline:none;margin-bottom:.65rem;transition:border-color .15s;}
+.login-card input[type=password]:focus{border-color:var(--red);}
+.btn-primary{width:100%;padding:.65rem 1rem;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s;}
+.btn-primary:hover{background:var(--red-dark);}
+.login-error{font-size:11px;color:var(--red);margin-top:.4rem;min-height:16px;}
 
-  /* ── LOGIN SCREEN ── */
-  #login-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 2rem;
-    background: var(--bg);
-  }
+/* APP */
+#app-screen{display:none;}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:.75rem 1.25rem;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:50;}
+.top-logo{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;background:var(--red);border-radius:7px;flex-shrink:0;}
+.top-logo span{font-size:10px;font-weight:600;color:#fff;}
+.top-title{font-size:13px;font-weight:600;flex:1;}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;transition:background .3s;flex-shrink:0;}
+.sync-dot.live{background:var(--green);}
+.sync-label{font-size:11px;color:var(--muted);}
+.btn-outline{font-size:11px;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:4px 9px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
 
-  .login-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    width: 100%;
-    max-width: 380px;
-    text-align: center;
-  }
+/* SESSION BAR */
+.session-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.session-bar::-webkit-scrollbar{display:none;}
+.session-tab{font-size:12px;font-weight:500;padding:4px 12px;border-radius:99px;border:1px solid var(--border);background:none;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);white-space:nowrap;transition:all .15s;}
+.session-tab.active{background:var(--red);color:#fff;border-color:var(--red);}
+.session-tab:hover:not(.active){border-color:var(--red);color:var(--red);}
+.btn-new-session{font-size:12px;padding:4px 10px;border-radius:99px;border:1px dashed var(--border);background:none;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);white-space:nowrap;}
+.btn-new-session:hover{border-color:var(--red);color:var(--red);}
 
-  .login-logo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    background: var(--red);
-    border-radius: 12px;
-    margin-bottom: 1.25rem;
-  }
+/* MAIN */
+.main{max-width:960px;margin:0 auto;padding:1.25rem 1rem 4rem;}
+.view-tabs{display:flex;gap:6px;margin-bottom:1.25rem;}
+.view-tab{font-size:12px;font-weight:500;padding:5px 14px;border-radius:99px;border:1px solid var(--border);background:none;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all .15s;}
+.view-tab.active{background:var(--text);color:#fff;border-color:var(--text);}
+.empty-session{text-align:center;padding:3rem 1rem;color:var(--muted);font-size:13px;}
 
-  .login-logo span {
-    font-size: 18px;
-    font-weight: 600;
-    color: white;
-    letter-spacing: -0.5px;
-  }
+/* TRIP INFO CARD */
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1.25rem;overflow:hidden;}
+.info-card-head{display:flex;align-items:center;gap:8px;padding:.7rem 1rem;border-bottom:1px solid var(--border);background:linear-gradient(90deg,#fff8f8 0%,#fff 60%);}
+.info-pill{font-size:10px;font-weight:500;padding:2px 9px;border-radius:99px;background:var(--red-light);color:var(--red-dark);}
+.info-card-name{font-size:12px;font-weight:600;flex:1;}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.info-field{padding:.7rem 1rem;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.info-field:nth-child(3n){border-right:none;}
+.info-field:nth-last-child(-n+3){border-bottom:none;}
+.info-field-wide{grid-column:1/-1;border-right:none;}
+.info-label{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.info-input{font-size:13px;font-family:'DM Sans',sans-serif;border:none;background:transparent;color:var(--text);width:100%;outline:none;padding:0;transition:background .15s;border-radius:3px;}
+.info-input:hover{background:#f5f4f1;padding:1px 4px;margin:-1px -4px;width:calc(100% + 8px);}
+.info-input:focus{background:#eeecea;padding:1px 4px;margin:-1px -4px;width:calc(100% + 8px);}
+.info-input::placeholder{color:var(--muted2);}
+.info-textarea{font-size:13px;font-family:'DM Sans',sans-serif;border:none;background:transparent;color:var(--text);width:100%;outline:none;padding:0;resize:none;min-height:40px;line-height:1.5;transition:background .15s;border-radius:3px;}
+.info-textarea:hover{background:#f5f4f1;padding:1px 4px;margin:-1px -4px;width:calc(100% + 8px);}
+.info-textarea:focus{background:#eeecea;padding:1px 4px;margin:-1px -4px;width:calc(100% + 8px);}
+.info-textarea::placeholder{color:var(--muted2);}
 
-  .login-card h1 {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-  }
+/* SUMMARY */
+.summary-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:1.25rem;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.65rem .5rem;text-align:center;}
+.stat-num{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums;}
+.stat-label{font-size:10px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.4px;}
 
-  .login-card p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 1.75rem;
-  }
+/* SECTION */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1rem;overflow:hidden;}
+.sec-head{display:flex;align-items:center;gap:8px;padding:.7rem 1rem;border-bottom:1px solid var(--border);}
+.sec-pill{font-size:10px;font-weight:500;padding:2px 9px;border-radius:99px;}
+.pill-manager{background:var(--purple-bg);color:var(--purple);}
+.pill-affiliate{background:var(--teal-bg);color:var(--teal);}
+.pill-yea{background:var(--red-light);color:var(--red-dark);}
+.pill-warehouse{background:var(--amber-bg);color:var(--amber);}
+.sec-name{font-size:12px;font-weight:600;flex:1;}
+.sec-pct{font-size:11px;color:var(--muted);}
+.progress-track{height:2px;background:var(--border);}
+.progress-fill{height:2px;transition:width .4s;}
+.fill-manager{background:var(--purple);}
+.fill-affiliate{background:var(--teal);}
+.fill-yea{background:var(--red);}
+.fill-warehouse{background:var(--amber);}
 
-  .login-card input[type="password"] {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-family: 'DM Mono', monospace;
-    font-size: 15px;
-    letter-spacing: 2px;
-    text-align: center;
-    outline: none;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.15s;
-  }
+.table-header{display:grid;grid-template-columns:24px 1fr 100px 100px 140px 24px;gap:8px;padding:.4rem 1rem;background:#faf9f7;border-bottom:1px solid var(--border);}
+.th{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+.item-row{display:grid;grid-template-columns:24px 1fr 100px 100px 140px 24px;gap:8px;align-items:center;padding:.5rem 1rem;border-bottom:1px solid var(--border);transition:background .1s;}
+.item-row:last-child{border-bottom:none;}
+.item-row:hover{background:#fafaf8;}
+.item-row:hover .btn-del{opacity:1;}
+.cb{width:16px;height:16px;border:1.5px solid #d0cec8;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.cb svg{display:none;}
+.cb.checked{border-color:transparent;}
+.cb.checked svg{display:block;}
+.cb.checked-manager{background:var(--purple);}
+.cb.checked-affiliate{background:var(--teal);}
+.cb.checked-yea{background:var(--red);}
+.cb.checked-warehouse{background:var(--amber);}
+.item-label{font-size:13px;color:var(--text);line-height:1.35;cursor:pointer;}
+.item-label.done{color:var(--muted2);text-decoration:line-through;}
+.cell-input{font-size:12px;font-family:'DM Sans',sans-serif;border:none;background:transparent;color:var(--text);width:100%;outline:none;padding:2px 5px;border-radius:4px;transition:background .15s;}
+.cell-input:hover{background:#f3f2ef;}
+.cell-input:focus{background:#eeecea;}
+.cell-input::placeholder{color:var(--muted2);}
+.task-edit{font-size:13px;font-family:'DM Sans',sans-serif;border:none;background:transparent;color:var(--text);width:100%;outline:none;padding:0;line-height:1.35;}
+.task-edit:focus{background:#eeecea;border-radius:3px;padding:1px 4px;}
+.task-edit.done{color:var(--muted2);text-decoration:line-through;}
+.task-edit::placeholder{color:var(--muted2);font-style:italic;}
+.btn-del{width:20px;height:20px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:4px;opacity:0;transition:opacity .15s,background .15s;flex-shrink:0;}
+.btn-del:hover{background:var(--red-light);}
+.add-item-row{padding:.45rem 1rem;border-top:1px dashed var(--border);display:flex;align-items:center;background:#fafaf8;}
+.btn-add-item{font-size:12px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;padding:2px 0;transition:color .15s;}
+.btn-add-item:hover{color:var(--red);}
 
-  .login-card input[type="password"]:focus {
-    border-color: var(--red);
-  }
+/* COST TRACKER */
+.cost-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:1rem;overflow:hidden;}
+.cost-head{display:flex;align-items:center;gap:8px;padding:.7rem 1rem;border-bottom:1px solid var(--border);}
+.cost-pill{font-size:10px;font-weight:500;padding:2px 9px;border-radius:99px;background:var(--blue-bg);color:var(--blue);}
 
-  .login-btn {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    background: var(--red);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
+/* currency rate bar */
+.rate-bar{padding:.55rem 1rem;background:#f0f4fb;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.rate-label{font-size:11px;color:var(--blue);font-weight:500;}
+.rate-chips{display:flex;gap:6px;flex-wrap:wrap;flex:1;}
+.rate-chip{font-size:11px;font-family:'DM Mono',monospace;background:#fff;border:1px solid #c8d8f0;border-radius:6px;padding:2px 8px;color:var(--blue);white-space:nowrap;}
+.rate-chip.loading{color:var(--muted2);}
+.rate-updated{font-size:10px;color:var(--muted);white-space:nowrap;}
+.btn-refresh-rates{font-size:11px;color:var(--blue);background:none;border:1px solid #c8d8f0;border-radius:6px;padding:2px 8px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.btn-refresh-rates:hover{background:#e8f0fb;}
 
-  .login-btn:hover { background: var(--red-dark); }
+.cost-table-head{display:grid;grid-template-columns:1fr 90px 90px 100px 90px 110px 24px;gap:6px;padding:.4rem 1rem;background:#faf9f7;border-bottom:1px solid var(--border);}
+.cost-row{display:grid;grid-template-columns:1fr 90px 90px 100px 90px 110px 24px;gap:6px;align-items:center;padding:.5rem 1rem;border-bottom:1px solid var(--border);transition:background .1s;}
+.cost-row:last-child{border-bottom:none;}
+.cost-row:hover{background:#fafaf8;}
+.cost-row:hover .btn-del{opacity:1;}
+.cost-cat{font-size:13px;}
+.cost-cat-edit{font-size:13px;font-family:'DM Sans',sans-serif;border:none;background:transparent;color:var(--text);width:100%;outline:none;padding:0;}
+.cost-cat-edit:focus{background:#eeecea;border-radius:3px;padding:1px 4px;}
+.cost-input{font-size:12px;font-family:'DM Mono',monospace;border:none;background:transparent;color:var(--text);width:100%;outline:none;padding:2px 5px;border-radius:4px;text-align:right;transition:background .15s;}
+.cost-input:hover{background:#f3f2ef;}
+.cost-input:focus{background:#eeecea;}
+.cost-input::placeholder{color:var(--muted2);}
+.currency-sel{font-size:11px;font-family:'DM Sans',sans-serif;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:5px;padding:2px 4px;outline:none;width:100%;cursor:pointer;}
+.myr-equiv{font-size:11px;font-family:'DM Mono',monospace;color:var(--muted);text-align:right;padding:2px 5px;}
+.cost-footer{display:grid;grid-template-columns:1fr 90px 90px 100px 90px 110px 24px;gap:6px;padding:.6rem 1rem;background:#faf9f7;border-top:1px solid var(--border);}
+.cost-total-label{font-size:12px;font-weight:600;}
+.cost-total-val{font-size:12px;font-weight:600;font-family:'DM Mono',monospace;text-align:right;}
+.cost-total-val.over{color:var(--red);}
+.cost-total-val.ok{color:var(--green);}
+.variance-pill{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;display:inline-block;}
+.variance-pill.over{background:var(--red-light);color:var(--red-dark);}
+.variance-pill.ok{background:var(--green-bg);color:var(--green);}
+.var-cell{font-size:12px;font-family:'DM Mono',monospace;padding:2px 5px;text-align:right;}
 
-  .login-error {
-    font-size: 12px;
-    color: var(--red);
-    margin-top: 0.5rem;
-    min-height: 18px;
-  }
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem;}
+.modal-bg.hidden{display:none;}
+.modal{background:var(--surface);border-radius:var(--radius-lg);padding:1.5rem;width:100%;max-width:340px;}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:.25rem;}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:1rem;}
+.modal input[type=text]{width:100%;padding:.6rem .85rem;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;margin-bottom:.75rem;transition:border-color .15s;}
+.modal input[type=text]:focus{border-color:var(--red);}
+.modal-btns{display:flex;gap:8px;}
+.btn-cancel{flex:1;padding:.6rem;background:none;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+.btn-cancel:hover{background:#f3f2ef;}
+.btn-confirm{flex:1;padding:.6rem;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;}
+.btn-confirm:hover{background:var(--red-dark);}
 
-  /* ── APP SCREEN ── */
-  #app-screen { display: none; }
-
-  .top-bar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0.9rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .top-logo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: var(--red);
-    border-radius: 7px;
-    flex-shrink: 0;
-  }
-
-  .top-logo span {
-    font-size: 11px;
-    font-weight: 600;
-    color: white;
-  }
-
-  .top-title {
-    font-size: 14px;
-    font-weight: 600;
-    flex: 1;
-  }
-
-  .top-sub {
-    font-size: 12px;
-    color: var(--muted);
-  }
-
-  .top-reset {
-    font-size: 12px;
-    color: var(--muted);
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 4px 10px;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: all 0.15s;
-  }
-
-  .top-reset:hover { border-color: var(--red); color: var(--red); }
-
-  .main {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 1.5rem 1rem 4rem;
-  }
-
-  /* summary strip */
-  .summary-strip {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 1.5rem;
-  }
-
-  .stat {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.7rem 0.5rem;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--text);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .stat-label {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-  }
-
-  /* sections */
-  .section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-  }
-
-  .sec-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sec-pill {
-    font-size: 11px;
-    font-weight: 500;
-    padding: 2px 10px;
-    border-radius: 99px;
-  }
-
-  .pill-manager { background: var(--purple-bg); color: var(--purple); }
-  .pill-affiliate { background: var(--teal-bg); color: var(--teal); }
-  .pill-yea { background: var(--red-light); color: var(--red-dark); }
-  .pill-warehouse { background: var(--amber-bg); color: var(--amber); }
-
-  .sec-name {
-    font-size: 13px;
-    font-weight: 600;
-    flex: 1;
-  }
-
-  .sec-count {
-    font-size: 12px;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .progress-track {
-    height: 2px;
-    background: var(--border);
-  }
-
-  .progress-fill {
-    height: 2px;
-    transition: width 0.3s ease;
-  }
-
-  .fill-manager { background: var(--purple); }
-  .fill-affiliate { background: var(--teal); }
-  .fill-yea { background: var(--red); }
-  .fill-warehouse { background: var(--amber); }
-
-  /* items */
-  .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 0.7rem 1rem;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.1s;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .item:last-child { border-bottom: none; }
-  .item:hover { background: #fafaf8; }
-  .item:active { background: #f3f2ef; }
-
-  .cb {
-    width: 18px;
-    height: 18px;
-    border: 1.5px solid #d0cec8;
-    border-radius: 5px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-  }
-
-  .cb svg { display: none; }
-
-  .item.checked .cb {
-    border-color: transparent;
-  }
-
-  .item.checked.sec-manager .cb { background: var(--purple); }
-  .item.checked.sec-affiliate .cb { background: var(--teal); }
-  .item.checked.sec-yea .cb { background: var(--red); }
-  .item.checked.sec-warehouse .cb { background: var(--amber); }
-  .item.checked .cb svg { display: block; }
-
-  .item-text {
-    font-size: 13.5px;
-    line-height: 1.45;
-    color: var(--text);
-    transition: color 0.15s;
-    flex: 1;
-  }
-
-  .item.checked .item-text {
-    color: #bbb;
-    text-decoration: line-through;
-  }
-
-  /* footer note */
-  .footer-note {
-    text-align: center;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2rem;
-  }
+@media(max-width:680px){
+  .info-grid{grid-template-columns:1fr 1fr;}
+  .info-field:nth-child(3n){border-right:1px solid var(--border);}
+  .info-field:nth-child(2n){border-right:none;}
+  .table-header,.item-row{grid-template-columns:24px 1fr 90px 100px 24px;}
+  .table-header>*:nth-child(4),.item-row>*:nth-child(4){display:none;}
+  .cost-table-head,.cost-row,.cost-footer{grid-template-columns:1fr 80px 80px 80px 24px;}
+  .cost-table-head>*:nth-child(4),.cost-table-head>*:nth-child(5),.cost-table-head>*:nth-child(6),
+  .cost-row>*:nth-child(4),.cost-row>*:nth-child(5),.cost-row>*:nth-child(6),
+  .cost-footer>*:nth-child(4),.cost-footer>*:nth-child(5),.cost-footer>*:nth-child(6){display:none;}
+  .summary-strip{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<div id="loading"><div class="spinner"></div><div style="font-size:13px;color:var(--muted);">Connecting...</div></div>
+
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo"><span>YEA</span></div>
     <h1>Team Checklist</h1>
-    <p>Taiwan Overseas Livestream Preparation</p>
-    <input type="password" id="pw-input" placeholder="Enter password" />
-    <button class="login-btn" onclick="tryLogin()">Enter</button>
+    <p>Overseas Livestream Preparation</p>
+    <input type="password" id="pw-input" placeholder="Enter password"/>
+    <button class="btn-primary" onclick="tryLogin()">Enter</button>
     <div class="login-error" id="login-error"></div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app-screen">
   <div class="top-bar">
     <div class="top-logo"><span>YEA</span></div>
-    <div class="top-title">Taiwan Livestream Prep</div>
-    <div class="top-sub" id="last-updated"></div>
-    <button class="top-reset" onclick="resetAll()">Reset</button>
+    <div class="top-title">Livestream Prep</div>
+    <div class="sync-dot" id="sync-dot"></div>
+    <div class="sync-label" id="sync-label">connecting</div>
+    <button class="btn-outline" onclick="confirmReset()">Reset session</button>
   </div>
+  <div class="session-bar" id="session-bar"></div>
   <div class="main">
-    <div class="summary-strip" id="summary"></div>
-    <div id="sections"></div>
-    <div class="footer-note">Tap any item to mark as done &nbsp;·&nbsp; YEA Business</div>
+    <div class="view-tabs">
+      <button class="view-tab active" id="tab-info" onclick="switchView('info')">Trip Info</button>
+      <button class="view-tab" id="tab-checklist" onclick="switchView('checklist')">Checklist</button>
+      <button class="view-tab" id="tab-cost" onclick="switchView('cost')">Cost Tracker</button>
+    </div>
+    <div id="view-info"></div>
+    <div id="view-checklist" style="display:none;">
+      <div class="summary-strip" id="summary"></div>
+      <div id="sections"></div>
+    </div>
+    <div id="view-cost" style="display:none;">
+      <div id="cost-container"></div>
+    </div>
   </div>
 </div>
 
-<script>
-const PASSWORD = 'yea2025';
+<div class="modal-bg hidden" id="modal-session">
+  <div class="modal">
+    <h3>New Session</h3>
+    <p>Give this livestream trip a name</p>
+    <input type="text" id="session-name-input" placeholder="e.g. Taiwan Mar 2026" maxlength="40"/>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="createSession()">Create</button>
+    </div>
+  </div>
+</div>
 
+<div class="modal-bg hidden" id="modal-reset">
+  <div class="modal">
+    <h3>Reset this session?</h3>
+    <p>Clears all data for this session. Cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="doReset()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, update, set, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwxmToOrlok2jFJbVWn23M8YVNsswfcEk",
+  authDomain: "yea-livestream-checklist.firebaseapp.com",
+  databaseURL: "https://yea-livestream-checklist-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "yea-livestream-checklist",
+  storageBucket: "yea-livestream-checklist.firebasestorage.app",
+  messagingSenderId: "495899628342",
+  appId: "1:495899628342:web:2c2d4024ad748cf432d997"
+};
+
+const PASSWORD = 'yea2025';
+const CURRENCIES = ['MYR','SGD','TWD','USD','EUR','GBP','JPY','THB','IDR','CNY','HKD'];
+const DEFAULT_COST_CATS = [
+  {key:'airfare',label:'Airfare'},
+  {key:'hotel',label:'Hotel'},
+  {key:'meals',label:'Meals / Dinner'},
+  {key:'transport',label:'Transport'},
+  {key:'equipment',label:'Equipment'},
+  {key:'others',label:'Others'}
+];
 const SECTIONS = [
-  {
-    id: 'manager', label: 'Manager', pill: 'pill-manager', fill: 'fill-manager',
-    items: [
-      'Taiwan Fest registration / confirmation',
-      'Category — shop whitelisting',
-      'Voucher support setup',
-    ]
-  },
-  {
-    id: 'affiliate', label: 'Affiliate', pill: 'pill-affiliate', fill: 'fill-affiliate',
-    items: [
-      'Confirm headcount (5 pax confirmed)',
-      'Arrange dinner in Taipei — 21 Jan',
-      'Arrange car pickup at 5.30pm — 21 Jan',
-      'Check livestream equipment & lighting',
-      'Brief affiliates on livestream plan & flow',
-    ]
-  },
-  {
-    id: 'yea', label: 'YEA', pill: 'pill-yea', fill: 'fill-yea',
-    items: [
-      'Logistics arrangement confirmed',
-      'Livestream sequence finalised',
-      'Full rundown prepared',
-      '货盘 (product tray) — stock locked',
-      'New shop opened for supplement',
-      'SFA submission completed',
-      'Margin recalculated (with voucher)',
-      'Ads budget confirmed',
-      'Welcome slide and bouquet',
-      'Hotel and flight arrangement',
-      'Restaurant arrangement',
-      'Minimize stock return — brief affiliate & live banner',
-      'WiFi VPN pretest',
-    ]
-  },
-  {
-    id: 'warehouse', label: 'Warehouse', pill: 'pill-warehouse', fill: 'fill-warehouse',
-    items: [
-      'Notify Kaimay',
-      'Prepare box',
-      'Forecast packaging time',
-    ]
-  }
+  {id:'manager',label:'Manager',pill:'pill-manager',fill:'fill-manager',
+    items:['Taiwan Fest registration / confirmation','Category — shop whitelisting','Voucher support setup']},
+  {id:'affiliate',label:'Affiliate',pill:'pill-affiliate',fill:'fill-affiliate',
+    items:['Confirm headcount (5 pax confirmed)','Arrange dinner in Taipei — 21 Jan','Arrange car pickup at 5.30pm — 21 Jan','Check livestream equipment & lighting','Brief affiliates on livestream plan & flow']},
+  {id:'yea',label:'YEA',pill:'pill-yea',fill:'fill-yea',
+    items:['Logistics arrangement confirmed','Livestream sequence finalised','Full rundown prepared','货盘 (product tray) — stock locked','New shop opened for supplement','SFA submission completed','Margin recalculated (with voucher)','Ads budget confirmed','Welcome slide and bouquet','Hotel and flight arrangement','Restaurant arrangement','Minimize stock return — brief affiliate & live banner','WiFi VPN pretest']},
+  {id:'warehouse',label:'Warehouse',pill:'pill-warehouse',fill:'fill-warehouse',
+    items:['Notify Kaimay','Prepare box','Forecast packaging time']}
 ];
 
-const STORAGE_KEY = 'yea_livestream_checklist_v1';
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-function loadState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) return JSON.parse(saved);
-  } catch(e) {}
-  const s = {};
-  SECTIONS.forEach(sec => { s[sec.id] = sec.items.map(() => false); });
-  return s;
-}
+let currentSession = null;
+let sessions = {};
+let dbState = {};
+let unsubFn = null;
+let currentView = 'info';
+let fxRates = {}; // rates to MYR
+let fxUpdated = null;
 
-let state = loadState();
+window.tryLogin = tryLogin;
+window.createSession = createSession;
+window.closeModal = closeModal;
+window.confirmReset = confirmReset;
+window.doReset = doReset;
+window.switchView = switchView;
+window.refreshRates = refreshRates;
 
-function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
-}
+document.getElementById('pw-input').addEventListener('keydown', e => { if(e.key==='Enter') tryLogin(); });
+document.getElementById('session-name-input').addEventListener('keydown', e => { if(e.key==='Enter') createSession(); });
 
 function tryLogin() {
   const val = document.getElementById('pw-input').value;
-  if (val === PASSWORD) {
+  if(val === PASSWORD) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-screen').style.display = 'block';
-    renderApp();
+    fetchRates().then(() => initApp());
   } else {
-    document.getElementById('login-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('login-error').textContent = 'Incorrect password.';
     document.getElementById('pw-input').value = '';
     document.getElementById('pw-input').focus();
   }
 }
 
-document.getElementById('pw-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') tryLogin();
-});
+// ── FX RATES ──
+async function fetchRates() {
+  try {
+    // Use frankfurter API (free, no key needed) - base MYR
+    const res = await fetch('https://api.frankfurter.app/latest?base=MYR&symbols=SGD,TWD,USD,EUR,GBP,JPY,THB,IDR,CNY,HKD');
+    const data = await res.json();
+    // data.rates are X per 1 MYR, we want MYR per 1 X
+    fxRates = { MYR: 1 };
+    Object.keys(data.rates).forEach(cur => {
+      fxRates[cur] = 1 / data.rates[cur]; // MYR per 1 unit of currency
+    });
+    fxUpdated = new Date().toLocaleTimeString('en-MY', {hour:'2-digit',minute:'2-digit'});
+  } catch(e) {
+    // fallback approximate rates
+    fxRates = {MYR:1,SGD:3.48,TWD:0.145,USD:4.65,EUR:5.10,GBP:5.90,JPY:0.031,THB:0.135,IDR:0.00029,CNY:0.64,HKD:0.60};
+    fxUpdated = 'offline';
+  }
+}
 
-function resetAll() {
-  if (!confirm('Reset all checkboxes?')) return;
-  SECTIONS.forEach(sec => { state[sec.id] = sec.items.map(() => false); });
-  saveState();
-  renderApp();
+function refreshRates() {
+  const chips = document.getElementById('rate-chips');
+  if(chips) chips.innerHTML = '<span class="rate-chip loading">Refreshing...</span>';
+  fetchRates().then(() => renderRateBar());
+}
+
+function toMYR(amount, currency) {
+  const rate = fxRates[currency] || 1;
+  return amount * rate;
+}
+
+// ── APP INIT ──
+function initApp() {
+  onValue(ref(db,'sessions'), snap => {
+    sessions = snap.val() || {};
+    renderSessionBar();
+    const keys = Object.keys(sessions);
+    if(!currentSession && keys.length > 0) selectSession(keys[0]);
+  });
+}
+
+function renderSessionBar() {
+  const bar = document.getElementById('session-bar');
+  bar.innerHTML = '';
+  Object.keys(sessions).forEach(key => {
+    const btn = document.createElement('button');
+    btn.className = 'session-tab' + (key === currentSession ? ' active' : '');
+    btn.textContent = sessions[key].name || key;
+    btn.onclick = () => selectSession(key);
+    bar.appendChild(btn);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'btn-new-session';
+  addBtn.textContent = '+ New Session';
+  addBtn.onclick = () => {
+    document.getElementById('modal-session').classList.remove('hidden');
+    setTimeout(() => document.getElementById('session-name-input').focus(), 50);
+  };
+  bar.appendChild(addBtn);
+}
+
+function selectSession(key) {
+  currentSession = key;
+  renderSessionBar();
+  if(unsubFn) unsubFn();
+  unsubFn = onValue(ref(db, `sessions/${key}/data`), snap => {
+    dbState = snap.val() || {};
+    document.getElementById('sync-dot').classList.add('live');
+    document.getElementById('sync-label').textContent = 'live';
+    renderCurrentView();
+  });
+}
+
+function createSession() {
+  const name = document.getElementById('session-name-input').value.trim();
+  if(!name) return;
+  const key = 'session_' + Date.now();
+  set(ref(db, `sessions/${key}`), {name, createdAt:Date.now(), data:{}}).then(() => {
+    closeModal();
+    document.getElementById('session-name-input').value = '';
+    selectSession(key);
+  });
+}
+
+function closeModal() {
+  document.getElementById('modal-session').classList.add('hidden');
+  document.getElementById('modal-reset').classList.add('hidden');
+}
+
+function confirmReset() {
+  if(!currentSession) return;
+  document.getElementById('modal-reset').classList.remove('hidden');
+}
+
+function doReset() {
+  if(!currentSession) return;
+  set(ref(db, `sessions/${currentSession}/data`), {}).then(() => closeModal());
+}
+
+function switchView(view) {
+  currentView = view;
+  ['info','checklist','cost'].forEach(v => {
+    document.getElementById('tab-'+v).classList.toggle('active', v===view);
+    document.getElementById('view-'+v).style.display = v===view ? 'block' : 'none';
+  });
+  renderCurrentView();
+}
+
+function renderCurrentView() {
+  if(currentView==='info') renderInfo();
+  else if(currentView==='checklist') renderChecklist();
+  else renderCost();
+}
+
+function saveField(path, value) {
+  if(!currentSession) return;
+  update(ref(db, `sessions/${currentSession}/data`), {[path]: value});
+}
+
+function removeField(path) {
+  if(!currentSession) return;
+  remove(ref(db, `sessions/${currentSession}/data/${path}`));
+}
+
+function esc(str) {
+  return String(str||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function checkSVG() {
   return `<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><polyline points="1.5,5 4,7.5 8.5,2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 }
+function plusSVG() {
+  return `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+}
+function trashSVG() {
+  return `<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 3.5h9M5 3.5V2.5a1 1 0 012 0v1M5.5 6v3.5M7.5 6v3.5M3 3.5l.5 7a1 1 0 001 1h4a1 1 0 001-1l.5-7" stroke="var(--red)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
 
-function renderApp() {
-  // last updated
-  const now = new Date();
-  document.getElementById('last-updated').textContent =
-    now.toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' });
+// ── TRIP INFO ──
+const INFO_FIELDS = [
+  {key:'tripName',   label:'Trip Name',          type:'text',  placeholder:'e.g. Taiwan Jan 2026'},
+  {key:'country',    label:'Country',             type:'text',  placeholder:'e.g. Taiwan'},
+  {key:'date',       label:'Date',                type:'text',  placeholder:'e.g. 21–24 Jan 2026'},
+  {key:'platform',   label:'Platform',            type:'text',  placeholder:'e.g. TikTok, Shopee Live'},
+  {key:'pic',        label:'PIC / Trip Lead',     type:'text',  placeholder:'e.g. Alex'},
+  {key:'venue',      label:'Venue / Location',    type:'text',  placeholder:'e.g. Taipei Studio A'},
+  {key:'schedule',   label:'Schedule / Timeslot', type:'text',  placeholder:'e.g. 8pm–11pm (GMT+8)'},
+  {key:'affiliates', label:'Affiliate Names',     type:'text',  placeholder:'e.g. Khai, Derrick, Amber'},
+  {key:'notes',      label:'Notes',               type:'textarea', wide:true, placeholder:'Any additional notes for the trip...'},
+];
 
-  // summary
-  let totalDone = 0, totalAll = 0;
-  SECTIONS.forEach(sec => {
-    const done = state[sec.id].filter(Boolean).length;
-    totalDone += done;
-    totalAll += sec.items.length;
+function renderInfo() {
+  const el = document.getElementById('view-info');
+  if(!currentSession) {
+    el.innerHTML = '<div class="empty-session">Create or select a session above to get started.</div>';
+    return;
+  }
+  const info = dbState.info || {};
+  const card = document.createElement('div');
+  card.className = 'info-card';
+  card.innerHTML = `
+    <div class="info-card-head">
+      <span class="info-pill">Trip Info</span>
+      <span class="info-card-name">${esc(info.tripName || 'Untitled Trip')}</span>
+    </div>
+    <div class="info-grid" id="info-grid"></div>
+  `;
+  el.innerHTML = '';
+  el.appendChild(card);
+
+  const grid = document.getElementById('info-grid');
+  INFO_FIELDS.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'info-field' + (f.wide ? ' info-field-wide' : '');
+    if(f.type === 'textarea') {
+      div.innerHTML = `<div class="info-label">${f.label}</div><textarea class="info-textarea" placeholder="${f.placeholder}" data-key="${f.key}">${esc(info[f.key])}</textarea>`;
+    } else {
+      div.innerHTML = `<div class="info-label">${f.label}</div><input class="info-input" type="text" placeholder="${f.placeholder}" value="${esc(info[f.key])}" data-key="${f.key}"/>`;
+    }
+    grid.appendChild(div);
   });
 
-  const sumEl = document.getElementById('summary');
-  sumEl.innerHTML = `
-    <div class="stat"><div class="stat-num">${totalDone}/${totalAll}</div><div class="stat-label">Total</div></div>
-    ${SECTIONS.map(sec => {
-      const d = state[sec.id].filter(Boolean).length;
-      return `<div class="stat"><div class="stat-num">${d}/${sec.items.length}</div><div class="stat-label">${sec.label}</div></div>`;
-    }).join('')}
-  `;
+  el.querySelectorAll('.info-input, .info-textarea').forEach(input => {
+    let t;
+    input.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        saveField(`info/${input.dataset.key}`, input.value);
+        // update card title live
+        if(input.dataset.key === 'tripName') {
+          const nameEl = document.querySelector('.info-card-name');
+          if(nameEl) nameEl.textContent = input.value || 'Untitled Trip';
+        }
+      }, 600);
+    });
+  });
+}
 
-  // sections
+// ── CHECKLIST ──
+function renderChecklist() {
+  if(!currentSession) {
+    document.getElementById('summary').innerHTML = '';
+    document.getElementById('sections').innerHTML = '<div class="empty-session">Create or select a session above to get started.</div>';
+    return;
+  }
+
+  let totalDone=0, totalAll=0;
+  SECTIONS.forEach(sec => {
+    sec.items.forEach((_,i) => { totalAll++; if(dbState[sec.id]?.[i]?.done) totalDone++; });
+    Object.keys(dbState[sec.id]?.custom||{}).forEach(k => { totalAll++; if(dbState[sec.id].custom[k]?.done) totalDone++; });
+  });
+  const overall = totalAll ? Math.round(totalDone/totalAll*100) : 0;
+
+  document.getElementById('summary').innerHTML = [
+    `<div class="stat"><div class="stat-num">${overall}%</div><div class="stat-label">Overall</div></div>`,
+    `<div class="stat"><div class="stat-num">${totalDone}/${totalAll}</div><div class="stat-label">Done</div></div>`,
+    ...SECTIONS.map(sec => {
+      let d=0,t=0;
+      sec.items.forEach((_,i) => { t++; if(dbState[sec.id]?.[i]?.done) d++; });
+      Object.keys(dbState[sec.id]?.custom||{}).forEach(k => { t++; if(dbState[sec.id].custom[k]?.done) d++; });
+      return `<div class="stat"><div class="stat-num">${t?Math.round(d/t*100):0}%</div><div class="stat-label">${sec.label}</div></div>`;
+    })
+  ].join('');
+
   const secEl = document.getElementById('sections');
   secEl.innerHTML = '';
 
   SECTIONS.forEach(sec => {
-    const done = state[sec.id].filter(Boolean).length;
-    const total = sec.items.length;
-    const pct = total ? Math.round(done / total * 100) : 0;
+    let done=0,total=0;
+    sec.items.forEach((_,i) => { total++; if(dbState[sec.id]?.[i]?.done) done++; });
+    const customs = dbState[sec.id]?.custom||{};
+    Object.keys(customs).forEach(k => { total++; if(customs[k]?.done) done++; });
+    const pct = total ? Math.round(done/total*100) : 0;
 
     const div = document.createElement('div');
     div.className = 'section';
@@ -501,27 +580,285 @@ function renderApp() {
       <div class="sec-head">
         <span class="sec-pill ${sec.pill}">${sec.label}</span>
         <span class="sec-name">${sec.label} tasks</span>
-        <span class="sec-count">${done}/${total}</span>
+        <span class="sec-pct">${pct}% (${done}/${total})</span>
       </div>
       <div class="progress-track"><div class="progress-fill ${sec.fill}" style="width:${pct}%"></div></div>
+      <div class="table-header">
+        <div class="th"></div><div class="th">Task</div>
+        <div class="th">PIC</div><div class="th">Status</div>
+        <div class="th">Remark</div><div class="th"></div>
+      </div>
     `;
 
-    sec.items.forEach((text, idx) => {
-      const checked = state[sec.id][idx];
+    sec.items.forEach((text,idx) => {
+      const d = dbState[sec.id]?.[idx]||{};
+      const isDone = d.done||false;
       const row = document.createElement('div');
-      row.className = `item sec-${sec.id}${checked ? ' checked' : ''}`;
-      row.innerHTML = `<div class="cb">${checkSVG()}</div><span class="item-text">${text}</span>`;
-      row.addEventListener('click', () => {
-        state[sec.id][idx] = !state[sec.id][idx];
-        saveState();
-        renderApp();
-      });
+      row.className = 'item-row';
+      row.innerHTML = `
+        <div class="cb ${isDone?'checked checked-'+sec.id:''}" data-sec="${sec.id}" data-idx="${idx}" data-type="default">${checkSVG()}</div>
+        <div class="item-label${isDone?' done':''}" data-sec="${sec.id}" data-idx="${idx}" data-type="default">${esc(text)}</div>
+        <input class="cell-input" placeholder="—" value="${esc(d.pic)}" data-sec="${sec.id}" data-idx="${idx}" data-field="pic" data-type="default"/>
+        <input class="cell-input" placeholder="—" value="${esc(d.status)}" data-sec="${sec.id}" data-idx="${idx}" data-field="status" data-type="default"/>
+        <input class="cell-input" placeholder="Remark..." value="${esc(d.remark)}" data-sec="${sec.id}" data-idx="${idx}" data-field="remark" data-type="default"/>
+        <div></div>
+      `;
       div.appendChild(row);
     });
 
+    Object.keys(customs).sort().forEach(k => {
+      const d = customs[k];
+      const isDone = d.done||false;
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
+        <div class="cb ${isDone?'checked checked-'+sec.id:''}" data-sec="${sec.id}" data-ckey="${k}" data-type="custom">${checkSVG()}</div>
+        <input class="task-edit${isDone?' done':''}" placeholder="Task name..." value="${esc(d.label)}" data-sec="${sec.id}" data-ckey="${k}" data-field="label" data-type="custom"/>
+        <input class="cell-input" placeholder="—" value="${esc(d.pic)}" data-sec="${sec.id}" data-ckey="${k}" data-field="pic" data-type="custom"/>
+        <input class="cell-input" placeholder="—" value="${esc(d.status)}" data-sec="${sec.id}" data-ckey="${k}" data-field="status" data-type="custom"/>
+        <input class="cell-input" placeholder="Remark..." value="${esc(d.remark)}" data-sec="${sec.id}" data-ckey="${k}" data-field="remark" data-type="custom"/>
+        <button class="btn-del" data-sec="${sec.id}" data-ckey="${k}">${trashSVG()}</button>
+      `;
+      div.appendChild(row);
+    });
+
+    const addRow = document.createElement('div');
+    addRow.className = 'add-item-row';
+    addRow.innerHTML = `<button class="btn-add-item" data-sec="${sec.id}">${plusSVG()} Add item</button>`;
+    div.appendChild(addRow);
     secEl.appendChild(div);
   });
+
+  secEl.querySelectorAll('.cb').forEach(el => {
+    el.addEventListener('click', () => {
+      if(el.dataset.type==='custom') {
+        const cur = dbState[el.dataset.sec]?.custom?.[el.dataset.ckey]?.done||false;
+        saveField(`${el.dataset.sec}/custom/${el.dataset.ckey}/done`, !cur);
+      } else {
+        const cur = dbState[el.dataset.sec]?.[el.dataset.idx]?.done||false;
+        saveField(`${el.dataset.sec}/${el.dataset.idx}/done`, !cur);
+      }
+    });
+  });
+
+  secEl.querySelectorAll('.item-label').forEach(el => {
+    el.addEventListener('click', () => {
+      const cur = dbState[el.dataset.sec]?.[el.dataset.idx]?.done||false;
+      saveField(`${el.dataset.sec}/${el.dataset.idx}/done`, !cur);
+    });
+  });
+
+  secEl.querySelectorAll('.cell-input,.task-edit').forEach(input => {
+    let t;
+    input.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const path = input.dataset.type==='custom'
+          ? `${input.dataset.sec}/custom/${input.dataset.ckey}/${input.dataset.field}`
+          : `${input.dataset.sec}/${input.dataset.idx}/${input.dataset.field}`;
+        saveField(path, input.value);
+      }, 700);
+    });
+  });
+
+  secEl.querySelectorAll('.btn-del[data-ckey]').forEach(btn => {
+    btn.addEventListener('click', () => removeField(`${btn.dataset.sec}/custom/${btn.dataset.ckey}`));
+  });
+
+  secEl.querySelectorAll('.btn-add-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const secId = btn.dataset.sec;
+      const key = 'c' + Date.now();
+      saveField(`${secId}/custom/${key}/label`, '');
+      saveField(`${secId}/custom/${key}/done`, false);
+      setTimeout(() => {
+        const inp = document.querySelector(`.task-edit[data-ckey="${key}"]`);
+        if(inp) inp.focus();
+      }, 400);
+    });
+  });
 }
+
+// ── COST TRACKER ──
+function renderRateBar() {
+  const bar = document.getElementById('rate-chips');
+  if(!bar) return;
+  const display = ['SGD','TWD','USD','EUR','JPY','THB'];
+  bar.innerHTML = display.map(c => {
+    const rate = fxRates[c];
+    return rate ? `<span class="rate-chip">1 ${c} = ${rate.toFixed(3)} MYR</span>` : '';
+  }).join('');
+  const upd = document.getElementById('rate-updated');
+  if(upd) upd.textContent = fxUpdated ? `Updated ${fxUpdated}` : '';
+}
+
+function renderCost() {
+  if(!currentSession) {
+    document.getElementById('cost-container').innerHTML = '<div class="empty-session">Create or select a session above to get started.</div>';
+    return;
+  }
+  const costs = dbState.costs||{};
+  const customCosts = costs.custom||{};
+
+  const wrap = document.createElement('div');
+  wrap.className = 'cost-section';
+  wrap.innerHTML = `
+    <div class="cost-head">
+      <span class="cost-pill">Cost Tracker</span>
+      <span style="font-size:12px;font-weight:600;flex:1;">Trip Expenses</span>
+    </div>
+    <div class="rate-bar">
+      <span class="rate-label">Live rates →</span>
+      <div class="rate-chips" id="rate-chips"><span class="rate-chip loading">Loading...</span></div>
+      <span class="rate-updated" id="rate-updated"></span>
+      <button class="btn-refresh-rates" onclick="refreshRates()">↻ Refresh</button>
+    </div>
+    <div class="cost-table-head">
+      <div class="th">Category</div>
+      <div class="th" style="text-align:right">Currency</div>
+      <div class="th" style="text-align:right">Budget</div>
+      <div class="th" style="text-align:right">Actual</div>
+      <div class="th" style="text-align:right">≈ MYR Actual</div>
+      <div class="th">Remark</div>
+      <div class="th"></div>
+    </div>
+    <div id="cost-rows"></div>
+    <div class="add-item-row" style="border-top:1px dashed var(--border);">
+      <button class="btn-add-item" id="btn-add-cost">${plusSVG()} Add category</button>
+    </div>
+    <div id="cost-footer" class="cost-footer"></div>
+  `;
+
+  document.getElementById('cost-container').innerHTML = '';
+  document.getElementById('cost-container').appendChild(wrap);
+  renderRateBar();
+
+  const rowsEl = document.getElementById('cost-rows');
+
+  function buildCostRow(catLabel, catKey, isCustom, d) {
+    d = d||{};
+    const selOptions = CURRENCIES.map(c => `<option value="${c}" ${(d.currency||'MYR')===c?'selected':''}>${c}</option>`).join('');
+    const row = document.createElement('div');
+    row.className = 'cost-row';
+    row.innerHTML = `
+      ${isCustom
+        ? `<input class="cost-cat-edit" placeholder="Category name..." value="${esc(d.label||'')}" data-key="${catKey}" data-field="label" data-type="custom"/>`
+        : `<div class="cost-cat">${catLabel}</div>`}
+      <select class="currency-sel" data-key="${catKey}" data-type="${isCustom?'custom':'default'}">${selOptions}</select>
+      <input class="cost-input" type="number" min="0" step="0.01" placeholder="0.00" value="${d.budget||''}" data-key="${catKey}" data-field="budget" data-type="${isCustom?'custom':'default'}"/>
+      <input class="cost-input" type="number" min="0" step="0.01" placeholder="0.00" value="${d.actual||''}" data-key="${catKey}" data-field="actual" data-type="${isCustom?'custom':'default'}"/>
+      <div class="myr-equiv" id="myr-${catKey}">—</div>
+      <input class="cell-input" placeholder="Note..." value="${esc(d.remark||'')}" data-key="${catKey}" data-field="remark" data-type="${isCustom?'custom':'default'}" style="font-size:12px;"/>
+      ${isCustom ? `<button class="btn-del" data-costkey="${catKey}">${trashSVG()}</button>` : '<div></div>'}
+    `;
+    rowsEl.appendChild(row);
+  }
+
+  DEFAULT_COST_CATS.forEach(cat => buildCostRow(cat.label, cat.key, false, costs[cat.key]));
+  Object.keys(customCosts).sort().forEach(k => buildCostRow('', k, true, customCosts[k]));
+
+  updateCostCalc();
+
+  rowsEl.querySelectorAll('.cost-input').forEach(input => {
+    let t;
+    input.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const base = input.dataset.type==='custom' ? `costs/custom/${input.dataset.key}` : `costs/${input.dataset.key}`;
+        saveField(`${base}/${input.dataset.field}`, parseFloat(input.value)||0);
+        updateCostCalc();
+      }, 500);
+    });
+  });
+
+  rowsEl.querySelectorAll('.currency-sel').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const base = sel.dataset.type==='custom' ? `costs/custom/${sel.dataset.key}` : `costs/${sel.dataset.key}`;
+      saveField(`${base}/currency`, sel.value);
+      updateCostCalc();
+    });
+  });
+
+  rowsEl.querySelectorAll('.cell-input,.cost-cat-edit').forEach(input => {
+    let t;
+    input.addEventListener('input', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const base = input.dataset.type==='custom' ? `costs/custom/${input.dataset.key}` : `costs/${input.dataset.key}`;
+        saveField(`${base}/${input.dataset.field}`, input.value);
+      }, 700);
+    });
+  });
+
+  rowsEl.querySelectorAll('.btn-del[data-costkey]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      removeField(`costs/custom/${btn.dataset.costkey}`);
+    });
+  });
+
+  document.getElementById('btn-add-cost').addEventListener('click', () => {
+    const key = 'cc' + Date.now();
+    saveField(`costs/custom/${key}/label`, '');
+    saveField(`costs/custom/${key}/currency`, 'MYR');
+    saveField(`costs/custom/${key}/budget`, 0);
+    saveField(`costs/custom/${key}/actual`, 0);
+    setTimeout(() => {
+      const inp = document.querySelector(`.cost-cat-edit[data-key="${key}"]`);
+      if(inp) inp.focus();
+    }, 400);
+  });
+}
+
+function updateCostCalc() {
+  let totalBudgetMYR=0, totalActualMYR=0;
+
+  document.querySelectorAll('.cost-row').forEach(row => {
+    const key = row.querySelector('.cost-input[data-field=budget]')?.dataset.key;
+    if(!key) return;
+    const budgetEl = row.querySelector('.cost-input[data-field=budget]');
+    const actualEl = row.querySelector('.cost-input[data-field=actual]');
+    const currEl = row.querySelector('.currency-sel');
+    const myrEl = row.querySelector(`#myr-${key}`);
+
+    const budget = parseFloat(budgetEl?.value)||0;
+    const actual = parseFloat(actualEl?.value)||0;
+    const currency = currEl?.value || 'MYR';
+
+    const budgetMYR = toMYR(budget, currency);
+    const actualMYR = toMYR(actual, currency);
+
+    totalBudgetMYR += budgetMYR;
+    totalActualMYR += actualMYR;
+
+    if(myrEl) {
+      if(!actual) { myrEl.textContent = '—'; }
+      else {
+        myrEl.textContent = currency === 'MYR'
+          ? `MYR ${actual.toFixed(2)}`
+          : `≈ ${actualMYR.toFixed(2)}`;
+        myrEl.style.color = currency === 'MYR' ? 'var(--muted)' : 'var(--blue)';
+      }
+    }
+  });
+
+  const footer = document.getElementById('cost-footer');
+  if(!footer) return;
+  const v = totalBudgetMYR - totalActualMYR;
+  const isOver = v < 0;
+  footer.innerHTML = `
+    <div class="cost-total-label">Total (MYR)</div>
+    <div></div>
+    <div class="cost-total-val">${totalBudgetMYR.toFixed(2)}</div>
+    <div class="cost-total-val ${isOver?'over':'ok'}">${totalActualMYR.toFixed(2)}</div>
+    <div class="cost-total-val ${isOver?'over':'ok'}" style="font-size:11px;">${totalActualMYR.toFixed(2)}</div>
+    <div><span class="variance-pill ${isOver?'over':'ok'}">${isOver?'Over ':'Under '}${Math.abs(v).toFixed(2)}</span></div>
+    <div></div>
+  `;
+}
+
+// init
+document.getElementById('loading').classList.add('hidden');
+document.getElementById('login-screen').style.display = 'flex';
 </script>
 </body>
 </html>
